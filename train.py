@@ -36,30 +36,16 @@ train_y = output_data[:num_train_entries]
 test_X = input_data[num_train_entries:]
 test_y = output_data[num_train_entries:]
 
-model = tf.keras.models.Sequential([
-    tf.keras.layers.Dense(256, activation='relu', input_dim=108),
-    tf.keras.layers.Dense(512, activation='relu'),
-    tf.keras.layers.Dense(512, activation='relu'),
-    tf.keras.layers.Dense(512, activation='relu'),
-    tf.keras.layers.Dense(256, activation='relu'),
-    tf.keras.layers.Dense(7)
-])
+model = storageNet.StorageNet()
 model.compile(
     optimizer=tf.keras.optimizers.Adam(0.001),
     loss=tf.keras.losses.mean_squared_error,
     metrics=['mae', 'mse'],
 )
-# model = storageNet.StorageNet()
-# model.compile(
-#     optimizer=tf.keras.optimizers.Adam(0.001),
-#     loss=tf.keras.losses.mean_squared_error,
-#     metrics=['mae', 'mse'],
-# )
-
 
 mse_losses = []
 
-for i in range(1000):
+for i in range(100):
     model.fit(train_X, train_y, epochs=1, batch_size=128)
     res = model.evaluate(test_X, test_y)
     mse_losses.append(res[0])
